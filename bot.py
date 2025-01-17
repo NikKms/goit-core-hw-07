@@ -1,4 +1,6 @@
 from colorama import Fore
+
+import birthday
 from address_book import AddressBook
 from decorators.input_error import input_error
 from record import Record
@@ -90,10 +92,12 @@ class Bot:
         if empty_message:
             return empty_message
 
-        res = [
-            f"📔{Fore.CYAN}{name} : 📞{Fore.GREEN}{'; '.join(phone.value for phone in record.phones)}"
-            for name, record in self.book.items()
-        ]
+        res = []
+        for name, record in self.book.items():
+            phones = "; ".join(phone.value for phone in record.phones)
+            b_day = f"🥳 {Fore.YELLOW}{record.birthday.value}" if record.birthday else f"{Fore.RED}No birthday set"
+            res.append(f"📔 {Fore.CYAN}{name} : 📞 {Fore.GREEN}{phones} | {b_day}")
+
         return "\n".join(res)
 
     @input_error
